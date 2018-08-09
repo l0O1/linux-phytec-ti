@@ -1,0 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * Copyright (C) 2018-2020 PHYTEC America, LLC - https://www.phytec.com
+ */
+
+/dts-v1/;
+
+#include "k3-am65xx-phycore-som.dtsi"	/* Superset - enables all SOM features */
+#include "k3-am65xx-pcm-941.dtsi"	/* Carrier board */
+
+/ {
+};

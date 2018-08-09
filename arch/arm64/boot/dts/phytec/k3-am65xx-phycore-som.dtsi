@@ -1,0 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * Copyright (C) 2018-2020 PHYTEC America, LLC - https://www.phytec.com
+ */
+
+/ {
+	model = "PHYTEC phyCORE-AM65x";
+	compatible =  "phytec,am65xx-phycore-som", "ti,am654";
+};
