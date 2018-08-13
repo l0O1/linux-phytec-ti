@@ -20,6 +20,19 @@
 		bootargs = "earlycon=ns16550a,mmio32,0x02810000";
 	};
 
+	/* fan set always on */
+	gpio_fan: gpio_fan {
+		compatible = "gpio-leds";
+		pinctrl-names = "default";
+		pinctrl-0 = <&gpio_fan_pins_default>;
+
+		fan@0 {
+			label = "am65xx-pcm-941:fan";
+			gpios = <&main_gpio1 49 GPIO_ACTIVE_HIGH>;
+			default-state = "on";
+		};
+	};
+
 	/* Dual Ethernet application node on PRU-ICSSG1 */
 	pruss1_eth: pruss1_eth {
 		compatible = "ti,am654-icssg-prueth";
@@ -83,6 +96,12 @@
 };
 
 &main_pmx0 {
+	gpio_fan_pins_default: gpio_fan_pins_default {
+		pinctrl-single,pins = <
+			AM65X_IOPAD(0x0244, PIN_OUTPUT, 7)	/* (AB28) PRG0_PRU1_GPO0.GPIO1_49 */
+		>;
+	};
+
 	icssg1_mdio_pins_default: icssg1_mdio_pins_default {
 		pinctrl-single,pins = <
 			AM65X_IOPAD(0x0180, PIN_INPUT, 0)	/* (AD18) PRG1_MDIO0_MDIO */
