@@ -6,8 +6,31 @@
 / {
 	model = "PHYTEC phyCORE-AM65x Carrier Board";
 	compatible = "phytec,am65xx-pcm-941", "phytec,am65xx-phycore-som", "ti,am654";
+
+	chosen {
+		/* UART1 as default stdout path */
+		stdout-path = &main_uart1;
+		bootargs = "earlycon=ns16550a,mmio32,0x02810000";
+	};
+};
+
+&main_pmx0 {
+	main_uart1_pins_default: main_uart1_pins_default {
+		pinctrl-single,pins = <
+			AM65X_IOPAD(0x014c, PIN_OUTPUT, 6)	/* (AD23) PRG1_PRU1GPO6.UART1_TXD */
+			AM65X_IOPAD(0x0174, PIN_INPUT, 6)	/* (AE23) PRG1_PRU1GPO17.UART1_RXD */
+			AM65X_IOPAD(0x0178, PIN_INPUT, 6)	/* (AD22) PRG1_PRU1GPO18.UART1_CTS */
+			AM65X_IOPAD(0x017c, PIN_OUTPUT, 6)	/* (AC21) PRG1_PRU1GPO19.UART1_RTS */
+		>;
+	};
 };
 
 &sdhci1 {
 	status = "okay";
+};
+
+&main_uart1 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&main_uart1_pins_default>;
 };
