@@ -7,3 +7,7 @@
 	model = "PHYTEC phyCORE-AM65x Carrier Board";
 	compatible = "phytec,am65xx-pcm-941", "phytec,am65xx-phycore-som", "ti,am654";
 };
+
+&sdhci1 {
+	status = "okay";
+};
