@@ -25,6 +25,12 @@
 			AM65X_IOPAD(0x017c, PIN_OUTPUT, 6)	/* (AC21) PRG1_PRU1GPO19.UART1_RTS */
 		>;
 	};
+
+	usb1_pins_default: usb1_pins_default {
+		pinctrl-single,pins = <
+			AM65X_IOPAD(0x02c0, PIN_OUTPUT, 0)	/* (AC8) USB1_DRVVBUS */
+		>;
+	};
 };
 
 &sdhci1 {
@@ -58,4 +64,19 @@
 	status = "okay";
 	pinctrl-names = "default";
 	pinctrl-0 = <&main_uart1_pins_default>;
+};
+
+&dwc3_1 {
+	status = "okay";
+};
+
+&usb1_phy {
+	status = "okay";
+};
+
+&usb1 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&usb1_pins_default>;
+	dr_mode = "otg";
 };
