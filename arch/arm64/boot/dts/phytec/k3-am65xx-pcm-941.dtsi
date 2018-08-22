@@ -20,6 +20,21 @@
 		bootargs = "earlycon=ns16550a,mmio32,0x02810000";
 	};
 
+	display: display {
+		status = "disabled";
+		pinctrl-names = "default";
+		pinctrl-0 = <&display_backlight_en_pin>;
+
+		backlight = <&display_backlight>;
+		enable-gpios = <&main_gpio1 57 GPIO_ACTIVE_LOW>;
+	};
+
+	display_backlight: display_backlight {
+		status = "disabled";
+		compatible = "pwm-backlight";
+		pwms = <&ecap0 0 50000 0>;
+	};
+
 	/* fan set always on */
 	gpio_fan: gpio_fan {
 		compatible = "gpio-leds";
@@ -96,6 +111,12 @@
 };
 
 &main_pmx0 {
+	display_backlight_en_pin: display_backlight_en_pin {
+		pinctrl-single,pins = <
+			AM65X_IOPAD(0x0264, PIN_OUTPUT, 7)	/* (W27) PRG0_PRU1_GPO8.GPIO1_57 */
+		>;
+	};
+
 	gpio_fan_pins_default: gpio_fan_pins_default {
 		pinctrl-single,pins = <
 			AM65X_IOPAD(0x0244, PIN_OUTPUT, 7)	/* (AB28) PRG0_PRU1_GPO0.GPIO1_49 */
@@ -139,6 +160,12 @@
 		>;
 	};
 
+	touchscreen_irq_pin: touchscreen_irq_pin {
+		pinctrl-single,pins = <
+			AM65X_IOPAD(0x025c, PIN_INPUT, 7)	/* (AB27) PRG0_PRU1_GPO6.GPIO1_55 */
+		>;
+	};
+
 	main_uart1_pins_default: main_uart1_pins_default {
 		pinctrl-single,pins = <
 			AM65X_IOPAD(0x014c, PIN_OUTPUT, 6)	/* (AD23) PRG1_PRU1GPO6.UART1_TXD */
@@ -151,6 +178,14 @@
 	usb1_pins_default: usb1_pins_default {
 		pinctrl-single,pins = <
 			AM65X_IOPAD(0x02c0, PIN_OUTPUT, 0)	/* (AC8) USB1_DRVVBUS */
+		>;
+	};
+};
+
+&main_pmx1 {
+	ecap0_pins_default: ecap0_pins_default {
+		pinctrl-single,pins = <
+			AM65X_IOPAD(0x0010, PIN_INPUT, 0)	/* (D21) ECAP0_IN_APWM_OUT */
 		>;
 	};
 };
@@ -174,6 +209,30 @@
 		ti,fifo-depth = <DP83867_PHYCR_FIFO_DEPTH_4_B_NIB>;
 		ti,led-0-active-low;
 		ti,led-2-active-low;
+	};
+};
+
+&dss_ports {
+	display_port: port {
+		status = "disabled";
+
+		reg = <0>;
+	};
+};
+
+&ecap0 {
+	status = "disabled";
+	pinctrl-names = "default";
+	pinctrl-0 = <&ecap0_pins_default>;
+};
+
+&main_i2c0 {
+	ft5x06: ft5x06@38 {
+		status = "disabled";
+		pinctrl-names = "default";
+		pinctrl-0 = <&touchscreen_irq_pin>;
+		interrupt-parent = <&main_gpio1>;
+		interrupts = <55 IRQ_TYPE_NONE>;
 	};
 };
 

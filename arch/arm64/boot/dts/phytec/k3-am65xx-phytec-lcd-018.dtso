@@ -1,0 +1,58 @@
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * Copyright (C) 2018-2020 PHYTEC America, LLC - https://www.phytec.com
+ */
+
+/dts-v1/;
+/plugin/;
+
+/ {
+};
+
+&display {
+	status = "okay";
+	compatible = "edt,etm0700g0dh6-lvds";
+
+	port {
+		display_in: endpoint {
+			remote-endpoint = <&oldi_out>;
+		};
+	};
+};
+
+&display_backlight {
+	status = "okay";
+
+	brightness-levels = <0 4 8 16 32 64 128 255>;
+	default-brightness-level = <6>;
+};
+
+&display_port {
+	status = "okay";
+
+	oldi_out: endpoint {
+		remote-endpoint = <&display_in>;
+	};
+};
+
+&dss {
+	status = "okay";
+};
+
+&gpu {
+	status = "okay";
+};
+
+&ecap0 {
+	status = "okay";
+};
+
+&main_i2c0 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	ft5x06: ft5x06@38 {
+		status = "okay";
+		compatible = "edt,edt-ft5406";
+	};
+};

@@ -5,7 +5,8 @@
 
 DTC_FLAGS += -@
 
-dtb-$(CONFIG_ARCH_K3_AM6_SOC) += k3-am65xx-phycore-kit.dtb
+dtb-$(CONFIG_ARCH_K3_AM6_SOC) += k3-am65xx-phycore-kit.dtb \
+	k3-am65xx-phytec-lcd-018.dtbo
 
 $(obj)/%.dtbo: $(src)/%.dtso FORCE
 	$(call if_changed_dep,dtc)
