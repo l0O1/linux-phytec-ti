@@ -213,6 +213,13 @@
 			AM65X_IOPAD(0x0010, PIN_INPUT, 0)	/* (D21) ECAP0_IN_APWM_OUT */
 		>;
 	};
+
+	main_i2c1_pins_default: main_i2c1_pins_default {
+		pinctrl-single,pins = <
+			AM65X_IOPAD(0x0008, PIN_INPUT, 0)	/* (B21) I2C1_SCL */
+			AM65X_IOPAD(0x000c, PIN_INPUT, 0)	/* (E21) I2C1_SDA */
+		>;
+	};
 };
 
 &wkup_pmx0 {
@@ -293,6 +300,13 @@
 		interrupt-parent = <&main_gpio1>;
 		interrupts = <55 IRQ_TYPE_NONE>;
 	};
+};
+
+&main_i2c1 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&main_i2c1_pins_default>;
+	clock-frequency = <400000>;
 };
 
 &m_can0 {
