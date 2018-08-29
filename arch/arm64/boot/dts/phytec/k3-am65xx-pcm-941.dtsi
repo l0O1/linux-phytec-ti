@@ -175,6 +175,15 @@
 		>;
 	};
 
+	main_uart2_pins_default: main_uart2_pins_default {
+		pinctrl-single,pins = <
+			AM65X_IOPAD(0x0260, PIN_OUTPUT, 6)	/* (W28) PRG0_PRU1_GPO7.UART2_TXD */
+			AM65X_IOPAD(0x0288, PIN_INPUT, 6)	/* (Y27) PRG0_PRU1_GPO17.UART2_RXD */
+			AM65X_IOPAD(0x028c, PIN_INPUT, 6)	/* (Y26) PRG0_PRU1_GPO18.UART2_CTS */
+			AM65X_IOPAD(0x0290, PIN_OUTPUT, 6)	/* (W26) PRG_PRU1_GPO19.UART2_RTS */
+		>;
+	};
+
 	usb1_pins_default: usb1_pins_default {
 		pinctrl-single,pins = <
 			AM65X_IOPAD(0x02c0, PIN_OUTPUT, 0)	/* (AC8) USB1_DRVVBUS */
@@ -267,6 +276,12 @@
 	status = "okay";
 	pinctrl-names = "default";
 	pinctrl-0 = <&main_uart1_pins_default>;
+};
+
+&main_uart2 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&main_uart2_pins_default>;
 };
 
 &dwc3_1 {
