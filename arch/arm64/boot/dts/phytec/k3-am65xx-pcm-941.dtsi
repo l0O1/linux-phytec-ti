@@ -199,6 +199,17 @@
 	};
 };
 
+&wkup_pmx0 {
+	mcu_uart0_pins_default: mcu_uart0_pins_default {
+		pinctrl-single,pins = <
+			AM65X_IOPAD(0x0044, PIN_INPUT, 4)	/* (P4) PRG0_PRU1_GPO17.UART2_RXD */
+			AM65X_IOPAD(0x0048, PIN_OUTPUT, 4)	/* (P5) PRG0_PRU1_GPO7.UART2_TXD */
+			AM65X_IOPAD(0x004c, PIN_INPUT, 4)	/* (P1) PRG0_PRU1_GPO18.UART2_CTS */
+			AM65X_IOPAD(0x0054, PIN_OUTPUT, 4)	/* (N3) PRG_PRU1_GPO19.UART2_RTS */
+		>;
+	};
+};
+
 &icssg1_mdio {
 	status = "okay";
 	pinctrl-names = "default";
@@ -270,6 +281,12 @@
 
 &serdes1 {
 	status = "okay";
+};
+
+&mcu_uart0 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&mcu_uart0_pins_default>;
 };
 
 &main_uart1 {
