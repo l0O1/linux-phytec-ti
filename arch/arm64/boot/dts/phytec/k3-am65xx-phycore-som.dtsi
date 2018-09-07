@@ -58,6 +58,46 @@
 			no-map;
 		};
 	};
+
+	reg_bt: regulator-bt {
+		status = "okay";
+		compatible = "regulator-fixed";
+		pinctrl-names = "default";
+		pinctrl-0 = <&reg_bt_on_pin>;
+		regulator-name = "bt";
+		gpio = <&main_gpio1 15 GPIO_ACTIVE_HIGH>;
+		startup-delay-us = <100>;
+		enable-active-high;
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		regulator-always-on;
+	};
+
+	reg_mmc1_sel_wlan: regulator-mmc1-sel-wlan {
+		status = "disabled";
+		compatible = "regulator-fixed";
+		pinctrl-names = "default";
+		pinctrl-0 = <&reg_mmc1_sel_wlan_pin>;
+		regulator-name = "mmc1-wlbt";
+		gpio = <&main_gpio1 89 GPIO_ACTIVE_LOW>;
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		regulator-always-on;
+	};
+
+	reg_wlan: regulator-wlan {
+		status = "disabled";
+		compatible = "regulator-fixed";
+		pinctrl-names = "default";
+		pinctrl-0 = <&reg_wlan_on_pin>;
+		regulator-name = "wlan";
+		gpio = <&main_gpio1 17 GPIO_ACTIVE_HIGH>;
+		startup-delay-us = <100>;
+		enable-active-high;
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		regulator-always-on;
+	};
 };
 
 &mailbox0_cluster0 {
@@ -158,6 +198,27 @@
 			AM65X_IOPAD(0x02dc, PIN_INPUT, 0)		/* (B24) MMC1_SDCD */
 		>;
 	};
+
+	reg_bt_on_pin: reg_bt_on_pin {
+		pinctrl-single,pins = <
+			AM65X_IOPAD(0x01bc, PIN_OUTPUT, 7)	/* (AG13) SPI0_CS0.GPIO1_15 */
+		>;
+	};
+
+	reg_wlan_on_pin: reg_wlan_on_pin {
+		pinctrl-single,pins = <
+			AM65X_IOPAD(0x01c4, PIN_OUTPUT, 7)	/* (AH13) SPI0_CLK.GPIO1_17 */
+		>;
+	};
+
+	main_uart0_pins_default: main_uart0_pins_default {
+		pinctrl-single,pins = <
+			AM65X_IOPAD(0x01e4, PIN_INPUT, 0)	/* (AF11) UART0_RXD */
+			AM65X_IOPAD(0x01e8, PIN_OUTPUT, 0)	/* (AE11) UART0_TXD */
+			AM65X_IOPAD(0x01ec, PIN_INPUT, 0)	/* (AG11) UART0_CTSn */
+			AM65X_IOPAD(0x01f0, PIN_OUTPUT, 0)	/* (AD11) UART0_RTSn */
+		>;
+	};
 };
 
 &main_pmx1 {
@@ -173,6 +234,13 @@
 			AM65X_IOPAD(0x0004, PIN_INPUT, 0)	/* (C21) I2C0_SDA */
 		>;
 	};
+
+	reg_mmc1_sel_wlan_pin: reg_mmc1_sel_wlan_pin {
+		pinctrl-single,pins = <
+			AM65X_IOPAD(0x001c, PIN_OUTPUT, 7)	/* (C23) TIMER_IO1.GPIO1_89 */
+		>;
+	};
+
 };
 
 &wkup_pmx0 {
@@ -258,4 +326,14 @@
 	pinctrl-0 = <&main_mmc1_pins_default>;
 	ti,driver-strength-ohm = <50>;
 	disable-wp;
+};
+
+&main_uart0 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&main_uart0_pins_default>;
+	uart-has-rtscts;
+	/* disable DMA to fix BT tx timeout issues */
+	/delete-property/ dmas;
+	/delete-property/ dma-names;
 };

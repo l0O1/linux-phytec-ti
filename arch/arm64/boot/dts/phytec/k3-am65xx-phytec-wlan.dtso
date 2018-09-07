@@ -1,0 +1,20 @@
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * Copyright (C) 2018-2020 PHYTEC America, LLC - https://www.phytec.com
+ */
+
+/dts-v1/;
+/plugin/;
+
+&reg_mmc1_sel_wlan {
+	status = "okay";
+};
+
+&reg_wlan {
+	status = "okay";
+};
+
+&sdhci1 {
+	status = "okay";
+	non-removable;
+};
