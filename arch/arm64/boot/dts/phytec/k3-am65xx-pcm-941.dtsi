@@ -200,6 +200,13 @@
 };
 
 &wkup_pmx0 {
+	mcu_mcan0_pins_default: mcu_mcan0_pins_default {
+		pinctrl-single,pins = <
+			AM65X_WKUP_IOPAD(0x00a8, PIN_OUTPUT_PULLUP, 0)	/* (W1) MCU_MCAN0_TX */
+			AM65X_WKUP_IOPAD(0x00ac, PIN_INPUT_PULLUP, 0)	/* (W2) MCU_MCAN0_RX */
+		>;
+	};
+
 	mcu_uart0_pins_default: mcu_uart0_pins_default {
 		pinctrl-single,pins = <
 			AM65X_IOPAD(0x0044, PIN_INPUT, 4)	/* (P4) PRG0_PRU1_GPO17.UART2_RXD */
@@ -253,6 +260,16 @@
 		pinctrl-0 = <&touchscreen_irq_pin>;
 		interrupt-parent = <&main_gpio1>;
 		interrupts = <55 IRQ_TYPE_NONE>;
+	};
+};
+
+&m_can0 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&mcu_mcan0_pins_default>;
+
+	can-transceiver {
+		max-bitrate = <1000000>;
 	};
 };
 
