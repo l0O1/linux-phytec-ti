@@ -25,6 +25,7 @@
 #define DP83867_CFG3		0x1e
 
 /* Extended Registers */
+#define DP83867_LEDCR2		0x0019
 #define DP83867_FLD_THR_CFG	0x002e
 #define DP83867_CFG4		0x0031
 
@@ -110,6 +111,10 @@
 /* FLD_THR_CFG */
 #define DP83867_FLD_THR_CFG_ENERGY_LOST_THR_MASK	0x7
 
+/* LEDCR2 bits */
+#define DP83867_LEDCR2_LED_2_POLARITY		BIT(10)
+#define DP83867_LEDCR2_LED_0_POLARITY		BIT(2)
+
 enum {
 	DP83867_PORT_MIRROING_KEEP,
 	DP83867_PORT_MIRROING_EN,
@@ -126,6 +131,8 @@ struct dp83867_private {
 	bool set_clk_output;
 	u32 clk_output_sel;
 	bool sgmii_ref_clk_en;
+	bool led_2_active_low;
+	bool led_0_active_low;
 };
 
 static int dp83867_ack_interrupt(struct phy_device *phydev)
@@ -273,6 +280,12 @@ static int dp83867_of_init(struct phy_device *phydev)
 
 	if (of_property_read_bool(of_node, "enet-phy-lane-no-swap"))
 		dp83867->port_mirroring = DP83867_PORT_MIRROING_DIS;
+
+	dp83867->led_0_active_low = of_property_read_bool(of_node,
+							"ti,led-0-active-low");
+
+	dp83867->led_2_active_low = of_property_read_bool(of_node,
+							"ti,led-2-active-low");
 
 	ret = of_property_read_u32(of_node, "ti,fifo-depth",
 				   &dp83867->fifo_depth);
@@ -461,6 +474,19 @@ static int dp83867_config_init(struct phy_device *phydev)
 
 		phy_modify_mmd(phydev, DP83867_DEVADDR, DP83867_IO_MUX_CFG,
 			       mask, val);
+	}
+
+	/* LED configuration */
+	if (dp83867->led_0_active_low) {
+		val = phy_read(phydev, DP83867_LEDCR2);
+		val &= ~DP83867_LEDCR2_LED_0_POLARITY;
+		phy_write(phydev, DP83867_LEDCR2, val);
+	}
+
+	if (dp83867->led_2_active_low) {
+		val = phy_read(phydev, DP83867_LEDCR2);
+		val &= ~DP83867_LEDCR2_LED_2_POLARITY;
+		phy_write(phydev, DP83867_LEDCR2, val);
 	}
 
 	return 0;

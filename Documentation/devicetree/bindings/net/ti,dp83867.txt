@@ -41,6 +41,10 @@ Optional property:
 				    SGMII configuration is used (4 or 6-wire modes).
 				    Some MACs work with differential SGMII clock.
 				    See data manual for details.
+	- ti,led-0-active-low - invert the polarity of LED_0 on the PHY so
+				    that it is active low
+	- ti,led-2-active-low - invert the polarity of LED_2 on the PHY so
+				    that it is active low
 
 Note: ti,min-output-impedance and ti,max-output-impedance are mutually
       exclusive. When both properties are present ti,max-output-impedance
