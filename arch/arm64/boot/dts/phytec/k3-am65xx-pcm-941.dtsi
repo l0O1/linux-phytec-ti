@@ -184,6 +184,12 @@
 		>;
 	};
 
+	usb0_pins_default: usb0_pins_default {
+		pinctrl-single,pins = <
+			AM65X_IOPAD(0x02bc, PIN_OUTPUT, 0)	/* (AD9) USB0_DRVVBUS */
+		>;
+	};
+
 	usb1_pins_default: usb1_pins_default {
 		pinctrl-single,pins = <
 			AM65X_IOPAD(0x02c0, PIN_OUTPUT, 0)	/* (AC8) USB1_DRVVBUS */
@@ -358,6 +364,25 @@
 	status = "okay";
 	pinctrl-names = "default";
 	pinctrl-0 = <&main_uart2_pins_default>;
+};
+
+&dwc3_0 {
+	status = "okay";
+};
+
+&usb0 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&usb0_pins_default>;
+	dr_mode = "host";
+};
+
+&usb0_phy {
+	status = "okay";
+};
+
+&serdes0 {
+	status = "okay";
 };
 
 &dwc3_1 {
