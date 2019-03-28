@@ -166,6 +166,16 @@
 		>;
 	};
 
+	main_spi1_pins_default: main_spi1_pins_default {
+		pinctrl-single,pins = <
+			AM65X_IOPAD(0x01d0, PIN_OUTPUT, 0)	/* (AD12) SPI1_CS0 */
+			AM65X_IOPAD(0x01d4, PIN_OUTPUT, 0)	/* (AG12) SPI1_CS1 */
+			AM65X_IOPAD(0x01d8, PIN_INPUT, 0)	/* (AH12) SPI1_CLK */
+			AM65X_IOPAD(0x01dc, PIN_INPUT, 0)	/* (AE12) SPI1_D0 */
+			AM65X_IOPAD(0x01e0, PIN_INPUT, 0)	/* (AF12) SPI1_D1 */
+		>;
+	};
+
 	main_uart1_pins_default: main_uart1_pins_default {
 		pinctrl-single,pins = <
 			AM65X_IOPAD(0x014c, PIN_OUTPUT, 6)	/* (AD23) PRG1_PRU1GPO6.UART1_TXD */
@@ -346,6 +356,12 @@
 
 &serdes1 {
 	status = "okay";
+};
+
+&main_spi1 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&main_spi1_pins_default>;
 };
 
 &mcu_uart0 {
