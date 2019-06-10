@@ -1635,6 +1635,15 @@ static int __init ks_pcie_probe(struct platform_device *pdev)
 	if (!link)
 		return -ENOMEM;
 
+	gpiod = devm_gpiod_get_optional(dev, "reset",
+					GPIOD_OUT_LOW);
+	if (IS_ERR(gpiod)) {
+		ret = PTR_ERR(gpiod);
+		if (ret != -EPROBE_DEFER)
+			dev_err(dev, "Failed to get reset GPIO\n");
+		goto err_gpiod;
+	}
+
 	for (i = 0; i < num_lanes; i++) {
 		snprintf(name, sizeof(name), "pcie-phy%d", i);
 		phy[i] = devm_phy_optional_get(dev, name);
@@ -1658,15 +1667,6 @@ static int __init ks_pcie_probe(struct platform_device *pdev)
 	ks_pcie->link = link;
 	ks_pcie->num_lanes = num_lanes;
 	ks_pcie->phy = phy;
-
-	gpiod = devm_gpiod_get_optional(dev, "reset",
-					GPIOD_OUT_LOW);
-	if (IS_ERR(gpiod)) {
-		ret = PTR_ERR(gpiod);
-		if (ret != -EPROBE_DEFER)
-			dev_err(dev, "Failed to get reset GPIO\n");
-		goto err_link;
-	}
 
 	ret = ks_pcie_enable_phy(ks_pcie);
 	if (ret) {
@@ -1774,6 +1774,7 @@ err_link:
 	while (--i >= 0 && link[i])
 		device_link_del(link[i]);
 
+err_gpiod:
 	return ret;
 }
 
