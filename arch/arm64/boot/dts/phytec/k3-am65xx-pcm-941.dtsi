@@ -166,6 +166,12 @@
 		>;
 	};
 
+	pcie1_reset_pin: pcie1_reset_pin {
+		pinctrl-single,pins = <
+			AM65X_IOPAD(0x0074, PIN_OUTPUT_PULLDOWN, 7)	/* (T27) GPMC0_CSn3.GPIO0_29 */
+		>;
+	};
+
 	main_spi1_pins_default: main_spi1_pins_default {
 		pinctrl-single,pins = <
 			AM65X_IOPAD(0x01d0, PIN_OUTPUT, 0)	/* (AD12) SPI1_CS0 */
@@ -364,8 +370,11 @@
 &pcie1_rc {
 	status = "okay";
 	num-lanes = <1>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&pcie1_reset_pin>;
 	phys = <&serdes1 PHY_TYPE_PCIE 0>;
 	phy-names = "pcie-phy0";
+	reset-gpios = <&main_gpio0 29 GPIO_ACTIVE_HIGH>;
 };
 
 &serdes1 {
