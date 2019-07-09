@@ -1,0 +1,95 @@
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * Copyright (C) 2019 PHYTEC America, LLC - https://www.phytec.com
+ *
+ *
+ * Sample Device Tree Overlay for use with PHYTEC Expansion Board PCM-957.
+ * Conflicts with overlay for LCD-018, k3-am65xx-phytec-lcd-018.dtso
+ *
+ */
+
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/pinctrl/k3.h>
+
+/* GPIO LED and Button examples */
+
+/ {
+	fragment@101 {
+		target-path = "/";
+
+		__overlay__ {
+			phytec_leds: leds {
+				compatible = "gpio-leds";
+				pinctrl-names = "default";
+				pinctrl-0 = <&led_pins_default>;
+				status = "okay";
+
+				led@0 {
+					label = "expansion_led";
+					gpios = <&main_gpio0 66 GPIO_ACTIVE_HIGH>;
+					linux,default-trigger = "gpio";
+					default-state = "on";
+				};
+			};
+
+			phytec_buttons: gpio-keys {
+				compatible = "gpio-keys";
+				pinctrl-names = "default";
+				pinctrl-0 = <&button_pins_default>;
+				status = "okay";
+
+				userbtn@0 {
+					label = "expansion_button";
+					gpios = <&main_gpio1 50 GPIO_ACTIVE_HIGH>;
+					linux,code = <0x100>;	/* BTN_MISC */
+				};
+			};
+		};
+	};
+};
+
+&main_pmx0 {
+	led_pins_default: led_pins_default {
+		pinctrl-single,pins = <
+			AM65X_IOPAD(0x0108, PIN_OUTPUT, 7)	/* (AH25) PRG1_PRU0GPO10.GPIO0_66 */
+		>;
+	};
+
+	button_pins_default: button_pins_default {
+		pinctrl-single,pins = <
+			AM65X_IOPAD(0x0248, PIN_INPUT, 7)	/* (AC28) PRG0_PRU1GPO1.GPIO1_50 */
+		>;
+	};
+};
+
+/* General purpose PWM (Conflicts with backlight on LCD-018) */
+&ecap0 {
+	status = "okay";
+};
+
+/* adc */
+&tscadc0 {
+	status = "okay";
+
+	adc {
+		ti,adc-channels = <0 1 2 3>;
+	};
+};
+
+/* spidev */
+&main_spi1 {
+	status = "okay";
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	/* main_spi1 enumerates as spi3 */
+	spidev3_0: spidev3@0 {
+		compatible =  "spidev";
+
+		reg = <0>;
+		spi-max-frequency = <48000000>;
+	};
+};
