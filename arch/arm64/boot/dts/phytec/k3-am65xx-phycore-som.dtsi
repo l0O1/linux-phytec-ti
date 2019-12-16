@@ -307,6 +307,13 @@
 		reg = <0x50>;
 		pagesize = <32>;
 	};
+
+	i2c_rtc: rtc@52 {
+		status = "okay";
+		compatible = "microcrystal,rv3028";
+		reg = <0x52>;
+		backup-switchover-mode = <0x1>;
+	};
 };
 
 &sdhci0 {
