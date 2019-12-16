@@ -18,6 +18,7 @@
 #include <linux/of_device.h>
 #include <linux/regmap.h>
 #include <linux/rtc.h>
+#include "rtc-core.h"
 
 #define RV3028_SEC			0x00
 #define RV3028_MIN			0x01
@@ -601,7 +602,7 @@ static int rv3028_probe(struct i2c_client *client)
 	struct rv3028_data *rv3028;
 	int ret, status;
 	u32 ohms;
-	u8 bsm;
+	u32 bsm;
 	struct nvmem_config nvmem_cfg = {
 		.name = "rv3028_nvram",
 		.word_size = 1,
@@ -674,7 +675,7 @@ static int rv3028_probe(struct i2c_client *client)
 		return ret;
 
 	/* setup backup switchover mode */
-	if (!device_property_read_u8(&client->dev, "backup-switchover-mode",
+	if (!device_property_read_u32(&client->dev, "backup-switchover-mode",
 				     &bsm))  {
 		if (bsm <= 3) {
 			ret = regmap_update_bits(rv3028->regmap, RV3028_BACKUP,
