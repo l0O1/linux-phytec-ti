@@ -43,11 +43,11 @@
 	status = "okay";
 };
 
-&ecap0 {
+&ehrpwm3 {
 	status = "okay";
 };
 
-&main_i2c0 {
+&wkup_i2c0 {
 	#address-cells = <1>;
 	#size-cells = <0>;
 

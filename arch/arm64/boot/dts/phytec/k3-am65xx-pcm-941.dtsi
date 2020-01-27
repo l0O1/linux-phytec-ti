@@ -32,7 +32,7 @@
 	display_backlight: display_backlight {
 		status = "disabled";
 		compatible = "pwm-backlight";
-		pwms = <&ecap0 0 50000 0>;
+		pwms = <&ehrpwm3 0 50000 0>;
 	};
 
 	/* fan set always on */
@@ -114,6 +114,12 @@
 	display_backlight_en_pin: display_backlight_en_pin {
 		pinctrl-single,pins = <
 			AM65X_IOPAD(0x0264, PIN_OUTPUT, 7)	/* (W27) PRG0_PRU1_GPO8.GPIO1_57 */
+		>;
+	};
+
+	ehrpwm3_pins_default: ehrpwm3_pins_default {
+		pinctrl-single,pins = <
+			AM65X_IOPAD(0x00ac, PIN_OUTPUT, 5)	/* (AH15) PRG2_PRU1_GPO0.EHRPWM3_A */
 		>;
 	};
 
@@ -260,6 +266,13 @@
 			AM65X_IOPAD(0x0054, PIN_OUTPUT, 4)	/* (N3) PRG_PRU1_GPO19.UART2_RTS */
 		>;
 	};
+
+	wkup_i2c0_pins_default: wkup_i2c0_pins_default {
+		pinctrl-single,pins = <
+			AM65X_WKUP_IOPAD(0x00e0, PIN_INPUT, 0)	/* (AC7) WKUP_I2C0_SCL */
+			AM65X_WKUP_IOPAD(0x00e4, PIN_INPUT, 0)	/* (AD6) WKUP_I2C0_SDA */
+		>;
+	};
 };
 
 &icssg1_mdio {
@@ -298,14 +311,10 @@
 	pinctrl-0 = <&ecap0_pins_default>;
 };
 
-&main_i2c0 {
-	ft5x06: ft5x06@38 {
-		status = "disabled";
-		pinctrl-names = "default";
-		pinctrl-0 = <&touchscreen_irq_pin>;
-		interrupt-parent = <&main_gpio1>;
-		interrupts = <55 IRQ_TYPE_NONE>;
-	};
+&ehrpwm3 {
+	status = "disabled";
+	pinctrl-names = "default";
+	pinctrl-0 = <&ehrpwm3_pins_default>;
 };
 
 &main_i2c1 {
@@ -313,6 +322,21 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&main_i2c1_pins_default>;
 	clock-frequency = <400000>;
+};
+
+&wkup_i2c0 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&wkup_i2c0_pins_default>;
+	clock-frequency = <400000>;
+
+	ft5x06: ft5x06@38 {
+		status = "disabled";
+		pinctrl-names = "default";
+		pinctrl-0 = <&touchscreen_irq_pin>;
+		interrupt-parent = <&main_gpio1>;
+		interrupts = <55 IRQ_TYPE_NONE>;
+	};
 };
 
 &m_can0 {
