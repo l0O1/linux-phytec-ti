@@ -332,6 +332,7 @@
 
 	ft5x06: ft5x06@38 {
 		status = "disabled";
+		reg = <0x38>;
 		pinctrl-names = "default";
 		pinctrl-0 = <&touchscreen_irq_pin>;
 		interrupt-parent = <&main_gpio1>;
